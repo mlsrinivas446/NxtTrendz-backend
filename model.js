@@ -1,9 +1,10 @@
 const mongoose = require("mongoose")
 
-let RegisterUser = new mongoose.Schema({
+let RegisterNxtTrendzUser = new mongoose.Schema({
     username: {
         type: String,
         required: true,
+        unique: true
     },
     email: {
         type: String,
@@ -13,9 +14,6 @@ let RegisterUser = new mongoose.Schema({
     password: {
         type: String,
         required: true
-    },
-    gender: {
-        type: String,
     }
     , location: {
         type: String,
@@ -23,4 +21,4 @@ let RegisterUser = new mongoose.Schema({
     }
 })
 
-module.exports =mongoose.model('RegisterUser',RegisterUser)
+module.exports =mongoose.model('RegisterNxtTrendzUser',RegisterNxtTrendzUser)

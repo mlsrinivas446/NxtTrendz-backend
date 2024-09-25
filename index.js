@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
 const cors = require("cors");
-const RegisterUser = require('./model');
+const RegisterNxtTrendzUser = require('./model');
 const app = express();
 app.use(express.json());
 app.use(cors({ origin: "*" }));
@@ -41,7 +41,7 @@ const authenticateToken = (req, res, next) => {
 
 app.get('/myprofile', authenticateToken, async (req, res) => {
   try {
-    let user = await RegisterUser.findById(req.user.id).select("-password");
+    let user = await RegisterNxtTrendzUser.findById(req.user.id).select("-password");
     
     if (!user) {
       return res.status(400).send("Invalid User");
@@ -56,25 +56,20 @@ app.get('/myprofile', authenticateToken, async (req, res) => {
 
 app.post('/register', async (req, res) => {
   try {
-    const { username, email, password, confirmPassword, gender, location } = req.body;
+    const { username, email, password, location } = req.body;
     //console.log("Received data:", req.body);
-    const userExisting = await RegisterUser.findOne({ email });
+    const userExisting = await RegisterNxtTrendzUser.findOne({ email });
     
     if (userExisting) {
       return res.status(400).send("User Already Existed");
     }
-    
-    if (password !== confirmPassword) {
-      return res.status(400).send("Passwords do not match");
-    }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    let newUser = new RegisterUser({
+    let newUser = new RegisterNxtTrendzUser({
       username,
       email,
       password: hashedPassword,
-      gender,
       location,
     });
 
@@ -88,9 +83,9 @@ app.post('/register', async (req, res) => {
 
 app.post('/login', async (req, res) => {  
   try {
-    const { email, password } = req.body;
+    const { username, password } = req.body;
 
-    let userExist = await RegisterUser.findOne({ email });
+    let userExist = await RegisterNxtTrendzUser.findOne({ username });
     
     if (!userExist) {
       return res.status(400).send("Invalid User");
@@ -104,10 +99,11 @@ app.post('/login', async (req, res) => {
 
     const payload = {
       id: userExist.id,
-      email: email,
+      username: username,
+      email: userExist.email,
     };
 
-    jwt.sign(payload, "jwt_token", { expiresIn: '1h' }, (err, token) => {
+    jwt.sign(payload, "jwt_token_nxtTrendz", { expiresIn: '1h' }, (err, token) => {
       if (err) {
         console.error("JWT signing error:", err);
         return res.status(500).send("Server Error");
