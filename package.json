@@ -1,12 +1,12 @@
 {
-  "name": "nxtwatch-backend",
+  "name": "NxtTrendz-backend",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
     "server": "nodemon index.js",
-    "NxtWatch-frontend": "npm start --prefix ../NxtWatch-frontend",
-    "dev": "concurrently \"npm run server\" \"npm run NxtWatch-frontend\""
+    "NxtTrendz-frontend": "npm start --prefix ../NxtTrendz-frontend",
+    "dev": "concurrently \"npm run server\" \"npm run NxtTrendz-frontend\""
   },
   "keywords": [],
   "author": "",
